@@ -1,30 +1,32 @@
 package kz.kalibek.holdem.data
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class Card(
-        val cardSuit: CardSuit,
-        val cardValue: CardValue
+        val cardSuit: CardSuit = CardSuit.SPADES,
+        val cardValue: CardValue = CardValue.TWO
 )
 
-enum class CardValue(val shortName: String, val fullName: String) {
-    TWO("2", "2"),
-    THREE("3", "3"),
-    FOUR("4", "4"),
-    FIVE("5", "5"),
-    SIX("6", "6"),
-    SEVEN("7", "7"),
-    EIGHT("8", "8"),
-    NINE("9", "9"),
-    TEN("10", "10"),
-    JACK("J", "Jack"),
-    QUEEN("Q", "Queen"),
-    KING("K", "King"),
-    ACE("A", "Ace");
+enum class CardValue {
+    @JsonProperty("2") TWO,
+    @JsonProperty("3") THREE,
+    @JsonProperty("4") FOUR,
+    @JsonProperty("5") FIVE,
+    @JsonProperty("6") SIX,
+    @JsonProperty("7") SEVEN,
+    @JsonProperty("8") EIGHT,
+    @JsonProperty("9") NINE,
+    @JsonProperty("10") TEN,
+    @JsonProperty("J") JACK,
+    @JsonProperty("Q") QUEEN,
+    @JsonProperty("K") KING,
+    @JsonProperty("A") ACE
 
 }
 
-enum class CardSuit(val suit: String) {
-    SPADES("♠"),
-    HEARTS("♥"),
-    DIAMONDS("♦"),
-    CLUBS("♣");
+enum class CardSuit {
+    @JsonProperty("♠") SPADES,
+    @JsonProperty("♥") HEARTS,
+    @JsonProperty("♦") DIAMONDS,
+    @JsonProperty("♣") CLUBS
 }
