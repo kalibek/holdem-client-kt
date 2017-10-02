@@ -14,7 +14,18 @@ enum class Combination {
     ROYAL_FLUSH
 }
 
-
-fun hasCombination(cards: List<Card>):Int {
-    return 0
+fun hasSameCardValue(cards: List<Card>, repeats: Int = 1, count: Int = 0): Boolean {
+    val sameValueMap = cards.groupBy { it.cardValue }.filter { it.value.size > repeats }
+    return sameValueMap.count() > count
 }
+fun hasSameCardSuit(cards: List<Card>, count: Int = 5): Boolean {
+    val sameSuitMap = cards.groupBy { it.cardSuit }.filter { it.value.size == count }
+    return sameSuitMap.isNotEmpty()
+}
+fun hasPair(cards: List<Card>) = hasSameCardValue(cards)
+fun hasThreeOfAKind(cards: List<Card>) = hasSameCardValue(cards, 2)
+fun hasFourOfAKind(cards: List<Card>) = hasSameCardValue(cards, 3)
+fun hasTwoPairs(cards: List<Card>) = hasSameCardValue(cards, count = 1)
+fun hasFullHouse(cards: List<Card>) = hasTwoPairs(cards) && hasThreeOfAKind(cards)
+
+fun hasFlush(cards: List<Card>) = hasSameCardSuit(cards)
