@@ -92,5 +92,16 @@ object CombinationSpec : Spek({
                 )))
             }
         }
+        on("straight") {
+            it("should return true when straight sent") {
+                assertTrue(hasStraight(listOf(
+                        Card(CardSuit.SPADES, CardValue.TEN),
+                        Card(CardSuit.DIAMONDS, CardValue.JACK),
+                        Card(CardSuit.HEARTS, CardValue.QUEEN),
+                        Card(CardSuit.SPADES, CardValue.KING),
+                        Card(CardSuit.SPADES, CardValue.ACE)
+                )))
+            }
+        }
     }
 })
