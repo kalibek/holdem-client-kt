@@ -7,20 +7,20 @@ data class Card(
         val cardValue: CardValue = CardValue.TWO
 )
 
-enum class CardValue {
-    @JsonProperty("2") TWO,
-    @JsonProperty("3") THREE,
-    @JsonProperty("4") FOUR,
-    @JsonProperty("5") FIVE,
-    @JsonProperty("6") SIX,
-    @JsonProperty("7") SEVEN,
-    @JsonProperty("8") EIGHT,
-    @JsonProperty("9") NINE,
-    @JsonProperty("10") TEN,
-    @JsonProperty("J") JACK,
-    @JsonProperty("Q") QUEEN,
-    @JsonProperty("K") KING,
-    @JsonProperty("A") ACE
+enum class CardValue(val order: Int) {
+    @JsonProperty("2") TWO(1),
+    @JsonProperty("3") THREE(2),
+    @JsonProperty("4") FOUR(3),
+    @JsonProperty("5") FIVE(4),
+    @JsonProperty("6") SIX(5),
+    @JsonProperty("7") SEVEN(6),
+    @JsonProperty("8") EIGHT(7),
+    @JsonProperty("9") NINE(8),
+    @JsonProperty("10") TEN(9),
+    @JsonProperty("J") JACK(10),
+    @JsonProperty("Q") QUEEN(11),
+    @JsonProperty("K") KING(12),
+    @JsonProperty("A") ACE(13)
 
 }
 

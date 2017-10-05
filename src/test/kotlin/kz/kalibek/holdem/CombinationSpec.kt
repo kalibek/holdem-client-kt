@@ -17,6 +17,9 @@ object CombinationSpec : Spek({
             it("should return false") {
                 assertFalse(hasPair(listOf(
                         Card(CardSuit.CLUBS, CardValue.KING),
+                        Card(CardSuit.CLUBS, CardValue.NINE),
+                        Card(CardSuit.DIAMONDS, CardValue.TEN),
+                        Card(CardSuit.SPADES, CardValue.FOUR),
                         Card(CardSuit.DIAMONDS, CardValue.ACE))))
             }
         }
@@ -24,6 +27,9 @@ object CombinationSpec : Spek({
         on("pair") {
             it("should return true") {
                 assertTrue(hasPair(listOf(
+                        Card(CardSuit.CLUBS, CardValue.KING),
+                        Card(CardSuit.CLUBS, CardValue.NINE),
+                        Card(CardSuit.DIAMONDS, CardValue.TEN),
                         Card(CardSuit.SPADES, CardValue.ACE),
                         Card(CardSuit.HEARTS, CardValue.ACE))))
             }
@@ -32,6 +38,8 @@ object CombinationSpec : Spek({
         on("three of a kind") {
             it("should return true") {
                 assertTrue(hasThreeOfAKind(listOf(
+                        Card(CardSuit.CLUBS, CardValue.KING),
+                        Card(CardSuit.CLUBS, CardValue.NINE),
                         Card(CardSuit.DIAMONDS, CardValue.JACK),
                         Card(CardSuit.CLUBS, CardValue.JACK),
                         Card(CardSuit.SPADES, CardValue.JACK)
@@ -42,6 +50,7 @@ object CombinationSpec : Spek({
         on("four of a kind") {
             it("should return true") {
                 assertTrue(hasFourOfAKind(listOf(
+                        Card(CardSuit.CLUBS, CardValue.JACK),
                         Card(CardSuit.SPADES, CardValue.NINE),
                         Card(CardSuit.CLUBS, CardValue.NINE),
                         Card(CardSuit.DIAMONDS, CardValue.NINE),
@@ -53,6 +62,7 @@ object CombinationSpec : Spek({
         on("two pairs") {
             it("should return true when two pairs sent") {
                 assertTrue(hasTwoPairs(listOf(
+                        Card(CardSuit.CLUBS, CardValue.JACK),
                         Card(CardSuit.SPADES, CardValue.NINE),
                         Card(CardSuit.CLUBS, CardValue.NINE),
                         Card(CardSuit.DIAMONDS, CardValue.TEN),
@@ -62,6 +72,7 @@ object CombinationSpec : Spek({
             it("should return false when one pair sent") {
                 assertFalse(hasTwoPairs(listOf(
                         Card(CardSuit.SPADES, CardValue.NINE),
+                        Card(CardSuit.CLUBS, CardValue.JACK),
                         Card(CardSuit.CLUBS, CardValue.NINE),
                         Card(CardSuit.DIAMONDS, CardValue.TEN),
                         Card(CardSuit.HEARTS, CardValue.SIX)
