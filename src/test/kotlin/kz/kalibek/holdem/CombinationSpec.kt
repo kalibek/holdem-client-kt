@@ -7,8 +7,7 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 
 object CombinationSpec : Spek({
     given("combination checker") {
@@ -112,6 +111,20 @@ object CombinationSpec : Spek({
                         Card(CardSuit.SPADES, CardValue.KING),
                         Card(CardSuit.SPADES, CardValue.ACE)
                 )))
+            }
+            it("should extract straight") {
+                val straight = listOf(
+                        Card(CardSuit.SPADES, CardValue.TEN),
+                        Card(CardSuit.DIAMONDS, CardValue.JACK),
+                        Card(CardSuit.HEARTS, CardValue.QUEEN),
+                        Card(CardSuit.SPADES, CardValue.KING),
+                        Card(CardSuit.SPADES, CardValue.ACE)
+                )
+                val cards = straight + listOf(
+                        Card(CardSuit.SPADES, CardValue.FOUR),
+                        Card(CardSuit.SPADES, CardValue.SEVEN)
+                        )
+                assertEquals(straight, extractStraight(cards))
             }
         }
     }

@@ -36,6 +36,24 @@ fun hasCardsInOrder(cards: List<Card>): Boolean {
     return false
 }
 
+fun extractStraight(cards: List<Card>): List<Card> {
+    var straight = emptyList<Card>()
+    cards.sortedBy { it.cardValue.ordinal }.forEachIndexed { index, card ->
+        var result = true
+        var i = 0
+        while (i < 5 && result) {
+            if (card.cardValue.ordinal + i <= CardValue.ACE.ordinal) {
+                val nextVal = CardValue.values()[card.cardValue.ordinal + i]
+                result = result && hasCardValue(cards, nextVal)
+            } else {
+                result = false
+            }
+            i++
+        }
+        if (result) straight = cards.sortedBy { it.cardValue.ordinal }.slice(IntRange(index, index + 4))
+    }
+    return straight
+}
 
 fun hasPair(cards: List<Card>) = hasSameCardValue(cards)
 fun hasThreeOfAKind(cards: List<Card>) = hasSameCardValue(cards, 2)
