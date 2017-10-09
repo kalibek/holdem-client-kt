@@ -10,8 +10,7 @@ import org.jetbrains.spek.api.dsl.on
 import org.junit.Assert.*
 
 object CombinationSpec : Spek({
-    given("combination checker") {
-
+    given("combination checker functions") {
         on("non pair") {
             it("should return false") {
                 assertFalse(hasPair(listOf(
@@ -123,9 +122,54 @@ object CombinationSpec : Spek({
                 val cards = straight + listOf(
                         Card(CardSuit.SPADES, CardValue.FOUR),
                         Card(CardSuit.SPADES, CardValue.SEVEN)
-                        )
+                )
                 assertEquals(straight, extractStraight(cards))
             }
         }
+        on("straight flush") {
+            it("should return true when straight flush sent") {
+                assertTrue(hasStraightFlush(listOf(
+                        Card(CardSuit.SPADES, CardValue.TEN),
+                        Card(CardSuit.SPADES, CardValue.JACK),
+                        Card(CardSuit.SPADES, CardValue.QUEEN),
+                        Card(CardSuit.SPADES, CardValue.KING),
+                        Card(CardSuit.SPADES, CardValue.ACE)
+                )))
+            }
+        }
+        on("royal flush") {
+            it("should return true when royal flush sent") {
+                assertTrue(hasRoyalFlush(listOf(
+                        Card(CardSuit.SPADES, CardValue.TEN),
+                        Card(CardSuit.SPADES, CardValue.JACK),
+                        Card(CardSuit.SPADES, CardValue.QUEEN),
+                        Card(CardSuit.SPADES, CardValue.KING),
+                        Card(CardSuit.SPADES, CardValue.ACE)
+                )))
+            }
+        }
     }
+    given("combination checker", {
+        on("no combination", {
+            it("should return breaker", {
+                assertEquals(Combination.BREAKER, getHighestCombination(listOf(
+                        Card(CardSuit.CLUBS, CardValue.KING),
+                        Card(CardSuit.CLUBS, CardValue.NINE),
+                        Card(CardSuit.DIAMONDS, CardValue.TEN),
+                        Card(CardSuit.SPADES, CardValue.FOUR),
+                        Card(CardSuit.DIAMONDS, CardValue.ACE))))
+            })
+        })
+        on("full house", {
+            it("should return full house", {
+                assertEquals(Combination.FULL_HOUSE, getHighestCombination(listOf(
+                        Card(CardSuit.SPADES, CardValue.NINE),
+                        Card(CardSuit.CLUBS, CardValue.NINE),
+                        Card(CardSuit.DIAMONDS, CardValue.TEN),
+                        Card(CardSuit.HEARTS, CardValue.TEN),
+                        Card(CardSuit.SPADES, CardValue.TEN)
+                )))
+            })
+        })
+    })
 })

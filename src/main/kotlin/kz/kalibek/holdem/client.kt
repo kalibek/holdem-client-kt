@@ -10,7 +10,8 @@ import javax.websocket.EndpointConfig
 import javax.websocket.Session
 
 
-val wsAddress = "ws://localhost:8080/ws?user=ktBot&password=pwd"
+const val PLAYER_NAME = "ktBot"
+val wsAddress = "ws://localhost:8080/ws?user=$PLAYER_NAME&password=pwd"
 val messageLatch = CountDownLatch(Integer.MAX_VALUE)
 
 object WebSocket : Endpoint() {
@@ -30,5 +31,5 @@ object WebSocket : Endpoint() {
 fun main(args: Array<String>): Unit {
     val clientManager = ClientManager.createClient()
     clientManager.connectToServer(WebSocket, URI.create(wsAddress))
-    messageLatch.await(100, TimeUnit.SECONDS)
+    messageLatch.await()
 }

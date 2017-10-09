@@ -6,11 +6,14 @@ import javax.websocket.MessageHandler
 object KtMessageHandler : MessageHandler.Whole<String> {
     override fun onMessage(message: String?) {
         message?.let {
-            val game = jsonMapToGame(message);
-            val (status, pot) = analyze(game)
-            when (status) {
-                Rise -> WebSocket.send(status, pot)
-                else -> WebSocket.send(status)
+            val game = jsonMapToGame(message)
+            println(game)
+            if(game.mover == PLAYER_NAME) {
+                val (status, pot) = analyze(game)
+                when (status) {
+                    Rise -> WebSocket.send(status, pot)
+                    else -> WebSocket.send(status)
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import kz.kalibek.holdem.data.Card
 import kz.kalibek.holdem.data.CardValue
 
 enum class Combination {
+    BREAKER,
     PAIR,
     TWO_PAIRS,
     THREE_OF_A_KIND,
@@ -60,7 +61,25 @@ fun hasThreeOfAKind(cards: List<Card>) = hasSameCardValue(cards, 2)
 fun hasFourOfAKind(cards: List<Card>) = hasSameCardValue(cards, 3)
 fun hasTwoPairs(cards: List<Card>) = hasSameCardValue(cards, count = 1)
 fun hasFullHouse(cards: List<Card>) = hasTwoPairs(cards) && hasThreeOfAKind(cards)
-
 fun hasFlush(cards: List<Card>) = hasSameCardSuit(cards)
-
 fun hasStraight(cards: List<Card>) = hasCardsInOrder(cards)
+fun hasStraightFlush(cards: List<Card>) = hasFlush(extractStraight(cards));
+fun hasRoyalFlush(cards: List<Card>) = hasStraightFlush(cards) && hasCardValue(extractStraight(cards), CardValue.ACE)
+
+fun getHighestCombination(cards: List<Card>): Combination {
+    val combinationChecker = mapOf<Combination, (cards: List<Card>)-> Boolean>(
+            Pair(Combination.ROYAL_FLUSH, ::hasRoyalFlush),
+            Pair(Combination.STRAIGHT_FLUSH, ::hasStraightFlush),
+            Pair(Combination.FOUR_OF_A_KIND, ::hasFourOfAKind),
+            Pair(Combination.FULL_HOUSE, ::hasFullHouse),
+            Pair(Combination.FLUSH, ::hasFlush),
+            Pair(Combination.STRAIGHT, ::hasStraight),
+            Pair(Combination.THREE_OF_A_KIND, ::hasThreeOfAKind),
+            Pair(Combination.PAIR, ::hasPair)
+    )
+
+    combinationChecker.forEach {
+        if(it.value(cards)) return it.key
+    }
+    return Combination.BREAKER
+}
