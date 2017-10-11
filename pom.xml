@@ -20,6 +20,7 @@
         <junit.platform.version>1.0.0</junit.platform.version>
         <junit.jupiter.version>5.0.0</junit.jupiter.version>
         <maven.surefire.plugin.version>2.19</maven.surefire.plugin.version>
+        <main.class>kz.kalibek.holdem.ClientKt</main.class>
     </properties>
 
     <dependencies>
@@ -115,6 +116,30 @@
                         <goals>
                             <goal>test-compile</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>${main.class}</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -7,7 +7,6 @@ object KtMessageHandler : MessageHandler.Whole<String> {
     override fun onMessage(message: String?) {
         message?.let {
             val game = jsonMapToGame(message)
-            println(game)
             if(game.mover == PLAYER_NAME) {
                 val (status, pot) = analyze(game)
                 when (status) {

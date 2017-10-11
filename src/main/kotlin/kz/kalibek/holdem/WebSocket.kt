@@ -1,18 +1,9 @@
 package kz.kalibek.holdem
 
 import kz.kalibek.holdem.data.PlayerStatus
-import org.glassfish.tyrus.client.ClientManager
-import java.net.URI
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import javax.websocket.Endpoint
 import javax.websocket.EndpointConfig
 import javax.websocket.Session
-
-
-const val PLAYER_NAME = "ktBot"
-val wsAddress = "ws://localhost:8080/ws?user=$PLAYER_NAME&password=pwd"
-val messageLatch = CountDownLatch(Integer.MAX_VALUE)
 
 object WebSocket : Endpoint() {
     lateinit var session: Session
@@ -28,8 +19,3 @@ object WebSocket : Endpoint() {
     }
 }
 
-fun main(args: Array<String>): Unit {
-    val clientManager = ClientManager.createClient()
-    clientManager.connectToServer(WebSocket, URI.create(wsAddress))
-    messageLatch.await()
-}
