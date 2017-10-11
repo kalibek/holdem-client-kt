@@ -5,52 +5,57 @@ import kz.kalibek.holdem.data.GameRound
 import kz.kalibek.holdem.data.Player
 import kz.kalibek.holdem.data.PlayerStatus
 
-fun analyze(game: Game): Pair<PlayerStatus, Int> {
+fun analyze(game: Game, counter: Int): Pair<PlayerStatus, Int> {
     val player = game.players.filter { it.name == PLAYER_NAME }.get(0)
     val combination: Combination = getHighestCombination(game.deskCards + player.cards)
 
     val strategy = when (game.gameRound) {
         GameRound.BLIND -> blindStrategy(player)
-        GameRound.FINAL -> finalStrategy(combination, player)
+        GameRound.FIVE_CARDS -> finalStrategy(combination, player)
         else -> gameStrategy(combination, player, game)
     }
 
     println("======== round: ${game.gameRound} ==========")
-//    println(game.deskCards + player.cards)
-//    println(player)
-//    println(combination)
+    println(game.deskCards + player.cards)
+    println("bet round $counter")
     println(strategy)
     println(player.balance)
+    println(GameStateHandler.roundMoney)
+
 
     return strategy.move()
 }
 
 fun blindStrategy(player: Player): GameStrategy {
-    return CallStrategy()
+    if (GameStateHandler.roundMoney < 0.3 * player.balance) {
+        return CallStrategy()
+    } else {
+        return FoldStrategy()
+    }
 }
 
 fun finalStrategy(combination: Combination, player: Player): GameStrategy {
     return when (combination) {
-        in Combination.PAIR..Combination.TWO_PAIRS -> CallStrategy()
-        in Combination.THREE_OF_A_KIND..Combination.STRAIGHT -> CallStrategy()
+        in Combination.PAIR..Combination.TWO_PAIRS -> rise(player, 0.2)
+        in Combination.THREE_OF_A_KIND..Combination.STRAIGHT -> rise(player, 0.3)
         in Combination.FLUSH..Combination.FULL_HOUSE -> rise(player, 0.8)
         in Combination.FOUR_OF_A_KIND..Combination.ROYAL_FLUSH -> AllInStrategy()
-        else -> CallStrategy()
+        else -> rise(player, 0.02)
     }
 }
 
 fun gameStrategy(combination: Combination, player: Player, game: Game): GameStrategy {
     return when (combination) {
-        in Combination.PAIR..Combination.TWO_PAIRS -> rise(player, 0.05)
-        in Combination.THREE_OF_A_KIND..Combination.STRAIGHT -> rise(player, 0.2)
+        in Combination.PAIR..Combination.TWO_PAIRS -> rise(player, 0.2)
+        in Combination.THREE_OF_A_KIND..Combination.STRAIGHT -> rise(player, 0.4)
         in Combination.FLUSH..Combination.FULL_HOUSE -> rise(player, 0.7)
         in Combination.FOUR_OF_A_KIND..Combination.ROYAL_FLUSH -> AllInStrategy()
         else -> {
-            val balanceCoef = player.pot / (player.pot + player.balance)
+            val balanceCoef = GameStateHandler.roundMoney / (GameStateHandler.roundMoney + player.balance)
             val avgBalance = game.players.map { it.balance }.average()
             if (balanceCoef < 0.3) {
                 if (player.balance > avgBalance) {
-                    rise(player, 0.2)
+                    return rise(player, 0.2)
                 }
                 return CallStrategy()
             }
@@ -60,8 +65,15 @@ fun gameStrategy(combination: Combination, player: Player, game: Game): GameStra
 }
 
 private fun rise(player: Player, coef: Double): GameStrategy {
-    val balanceCoef = player.pot / (player.pot + player.balance)
-    return if (balanceCoef < coef) RiseStrategy((player.balance * coef).toInt()) else FoldStrategy()
+    if (GameStateHandler.roundMoney > 0.3 * player.balance) {
+        if (coef < 0.3) {
+            return CallStrategy()
+        } else {
+            return RiseStrategy((player.balance * coef).toInt())
+        }
+    } else {
+        return CallStrategy()
+    }
 }
 
 interface GameStrategy {
