@@ -6,7 +6,7 @@ import kz.kalibek.holdem.data.Player
 import kz.kalibek.holdem.data.PlayerStatus
 
 fun analyze(game: Game, counter: Int): Pair<PlayerStatus, Int> {
-    val player = game.players.filter { it.name == PLAYER_NAME }.get(0)
+    val player = getPlayer(game)
     val combination: Combination = getHighestCombination(game.deskCards + player.cards)
 
     val strategy = when (game.gameRound) {
@@ -21,9 +21,19 @@ fun analyze(game: Game, counter: Int): Pair<PlayerStatus, Int> {
     println(strategy)
     println(player.balance)
     println(GameStateHandler.roundMoney)
+    println(combination)
 
 
     return strategy.move()
+}
+
+fun getPlayer(game: Game): Player {
+    for(player in game.players) {
+        if(player.name == PLAYER_NAME) {
+            return player
+        }
+    }
+    return Player()
 }
 
 fun blindStrategy(player: Player): GameStrategy {
@@ -36,6 +46,7 @@ fun blindStrategy(player: Player): GameStrategy {
 
 fun finalStrategy(combination: Combination, player: Player): GameStrategy {
     return when (combination) {
+        Combination.BREAKER -> FoldStrategy()
         in Combination.PAIR..Combination.TWO_PAIRS -> rise(player, 0.2)
         in Combination.THREE_OF_A_KIND..Combination.STRAIGHT -> rise(player, 0.3)
         in Combination.FLUSH..Combination.FULL_HOUSE -> rise(player, 0.8)
@@ -46,6 +57,9 @@ fun finalStrategy(combination: Combination, player: Player): GameStrategy {
 
 fun gameStrategy(combination: Combination, player: Player, game: Game): GameStrategy {
     return when (combination) {
+        Combination.BREAKER -> {
+            FoldStrategy()
+        }
         in Combination.PAIR..Combination.TWO_PAIRS -> rise(player, 0.2)
         in Combination.THREE_OF_A_KIND..Combination.STRAIGHT -> rise(player, 0.4)
         in Combination.FLUSH..Combination.FULL_HOUSE -> rise(player, 0.7)

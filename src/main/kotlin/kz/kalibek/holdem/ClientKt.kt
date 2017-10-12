@@ -4,8 +4,8 @@ import org.glassfish.tyrus.client.ClientManager
 import java.net.URI
 import java.util.concurrent.CountDownLatch
 
-const val PLAYER_NAME = "kalibek-bot"
-val wsAddress = "ws://10.14.160.149:8080/ws?user=$PLAYER_NAME&password=pwd"
+const val PLAYER_NAME = "kalibek_turgumbayev_astana"
+val wsAddress = "ws://10.6.99.51:8080/ws?user=$PLAYER_NAME&password=pwd"
 //val wsAddress = "ws://localhost:8080/ws?user=$PLAYER_NAME&password=pwd"
 val messageLatch = CountDownLatch(Integer.MAX_VALUE)
 

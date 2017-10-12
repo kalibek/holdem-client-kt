@@ -75,6 +75,7 @@ fun getHighestCombination(cards: List<Card>): Combination {
             Pair(Combination.FLUSH, ::hasFlush),
             Pair(Combination.STRAIGHT, ::hasStraight),
             Pair(Combination.THREE_OF_A_KIND, ::hasThreeOfAKind),
+            Pair(Combination.TWO_PAIRS, ::hasTwoPairs),
             Pair(Combination.PAIR, ::hasPair)
     )
 
